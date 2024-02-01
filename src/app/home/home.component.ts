@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
 
-	appHeaderTitle: string = "NGX Datetimepicker Demo Form"
+	appHeaderTitle: string = "Dynamic, flexible reactive form demo"
 	myInfo:string = " (C) 2024 Panos Zafeiropoulos "
 
 }
