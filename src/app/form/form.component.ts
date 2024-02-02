@@ -8,7 +8,12 @@ const ItemsFormFields = [
     controlName: 'itemName',
     fieldLabel: 'Item Name:',
     inputType: 'text',
-
+  },
+  {
+    controlType: 'input',
+    controlName: 'itemId',
+    fieldLabel: 'Item Id:',
+    inputType: 'number',
   },
   {
     controlType: 'button',
