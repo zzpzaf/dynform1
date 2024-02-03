@@ -8,12 +8,14 @@ const ItemsFormFields = [
     controlName: 'itemName',
     fieldLabel: 'Item Name:',
     inputType: 'text',
+    initialValue: 'My fantastic Item',
   },
   {
     controlType: 'input',
     controlName: 'itemId',
     fieldLabel: 'Item Id:',
     inputType: 'number',
+    initialValue: 123,
   },
   {
     controlType: 'button',
@@ -43,6 +45,7 @@ export class FormComponent implements OnInit{
   
   ngOnInit(): void {
     this.initializeForm();
+    this.setFormValues();
   }
 
 
@@ -53,6 +56,20 @@ export class FormComponent implements OnInit{
     });
     this.dynFormGroup = fbGroup;
   }
+
+  setFormValues(): void {
+    for(let control in this.dynFormGroup.controls){
+      this.formFields.forEach((field) => {
+        if(field['controlName'] === control){
+          this.dynFormGroup.controls[control].patchValue(field['initialValue'])
+        }
+      });
+      console.log(">===>> " + control + " - " + this.dynFormGroup.controls[control].value);
+    }
+  }
+
+
+
 
   onFormSubmit(event: Event): void {
     console.log('onFormSubmit() - dynFormGroup', this.dynFormGroup);
