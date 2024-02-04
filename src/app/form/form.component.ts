@@ -1,9 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ItemsFormFields } from '../dataObjects/itemFormFields';
 import { ChangeService } from '../change.service';
 import { Subscription } from 'rxjs';
 import { IItem } from '../dataObjects/iitem';
+import { ICategory } from '../dataObjects/icatecory';
+import { IFormOptions } from '../dataObjects/IFormField';
+import { DataService } from '../data.service';
 
 
 @Component({
@@ -11,15 +14,17 @@ import { IItem } from '../dataObjects/iitem';
   templateUrl: './form.component.html',
   styleUrls: ['./form.component.scss']
 })
-export class FormComponent implements OnInit{
+export class FormComponent implements OnInit, OnDestroy{
 
   
   constructor( 
     private formBuilder: FormBuilder, 
     private changeService: ChangeService,
+    private dataServise: DataService,
    ) { } 
   
   private itemChangeSubscription!: Subscription ;
+  private categoriesChangeSubscription!: Subscription ;
   public dynFormGroup!: FormGroup;
   public formFields = ItemsFormFields;
 
@@ -36,6 +41,8 @@ export class FormComponent implements OnInit{
         console.log(">===>> formComponent -  ngOnInit() - "  + error + ' - Error getting Updated item from changeService.');
       }
     });
+
+    this.updateOptions('itemCategories');
 
     this.initializeForm();
     this.setFormControlValues();
@@ -67,6 +74,23 @@ export class FormComponent implements OnInit{
       if (dataField !== undefined && item.hasOwnProperty(dataField)) {
         field.initialValue = item[dataField];
       }
+    });
+  }
+
+  updateOptions(cotrolName: string) {
+    this.dataServise.getCategories().subscribe((categories: ICategory[]) => {
+      //console.log('>===>> updateItem() - categories', categories);
+      let options: IFormOptions[] = [];
+      categories.forEach((category: ICategory) => {
+        options.push({optionKey: category.categoryId, optionValue: category.categoryName});
+      });
+      this.formFields.forEach((field) => {
+        if( field.controlName === cotrolName && field.controlType === 'select') {
+          field.options = options;
+        }
+      });
+
+      this.changeService.setCategories(categories);
     });
   }
 
