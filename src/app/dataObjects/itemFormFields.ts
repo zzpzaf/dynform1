@@ -16,8 +16,7 @@ export const ItemsFormFields: IFormField[] = [
           controlName: 'itemId',
           fieldLabel: 'Item Id:',
           inputType: 'number',
-          // initialValue: 0,
-
+          initialValue: 999,
         },
         {
           dataField: 'categoryNames',
@@ -28,6 +27,14 @@ export const ItemsFormFields: IFormField[] = [
           options: [],
           multipleOptions: true,
           promptText: 'Select at least one',
+        },
+        {
+          dataField: 'isItemEnabled',
+          controlType: 'input',
+          controlName: 'isItemEnabled',
+          fieldLabel: 'Enabled:',
+          inputType: 'checkbox',
+          initialValue: true,
         },
         {
           controlType: 'button',

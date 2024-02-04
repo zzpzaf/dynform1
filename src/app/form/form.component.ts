@@ -52,7 +52,8 @@ export class FormComponent implements OnInit, OnDestroy{
   initializeForm(): void {
     const fbGroup = this.formBuilder.group({});
     this.formFields.forEach((field) => {
-      fbGroup.addControl(field.controlName, new FormControl(""));
+      // fbGroup.addControl(field.controlName, new FormControl(""));
+      fbGroup.addControl(field.controlName, new FormControl((field.initialValue !== undefined &&  field.initialValue !== null) ? field.initialValue : ''));
     });
     this.dynFormGroup = fbGroup;
   }
@@ -87,6 +88,10 @@ export class FormComponent implements OnInit, OnDestroy{
           // console.log('>===>> updateFormFieldsInitialValues() - field.initialValue', field.initialValue);
         } else {
           field.initialValue = item[dataField];
+          if (field.inputType === 'checkbox') {
+            // field.initialValue = true;
+            console.log('>===>> updateFormFieldsInitialValues() - field.initialValue', field.initialValue);
+          }
         }
 
       }
