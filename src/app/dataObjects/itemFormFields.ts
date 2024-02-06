@@ -29,12 +29,31 @@ export const ItemsFormFields: IFormField[] = [
           promptText: 'Select at least one',
         },
         {
+          dataField: 'itemStatusId',
+          controlType: 'input',
+          controlName: 'itemStatus',
+          fieldLabel: 'Item Status:',
+          inputType: 'radio',
+          options: [
+            {optionKey: 1, optionValue: 'Active'},
+            {optionKey: 2, optionValue: 'Canceled'},
+            {optionKey: 3, optionValue: 'Pending', isOptionSelected: true},
+          ],
+        },
+        {
           dataField: 'isItemEnabled',
           controlType: 'input',
           controlName: 'isItemEnabled',
           fieldLabel: 'Enabled:',
           inputType: 'checkbox',
           initialValue: true,
+        },
+        {
+          dataField: 'itemStatusId',
+          controlType: 'input',
+          controlName: 'itemStatus',
+          fieldLabel: 'Item Status:',
+          inputType: 'radio',
         },
         {
           controlType: 'button',

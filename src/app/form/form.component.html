@@ -6,11 +6,35 @@
         <div [ngSwitch]="field.controlType">
 
             <div *ngSwitchCase="'input'">
-                <div class = "form-field">
+
+                <ng-template [ngIf]="field.inputType==='radio'" [ngIfElse]="other" >
+                    <label *ngFor="let option of field.options">
+                    <input
+                        [name]="field.controlName"
+                        [type]="field.inputType"
+                        [value]="option.optionKey"
+                        [formControlName]="field.controlName"
+                        [checked]="option.isOptionSelected === true"
+                    />
+                    {{ option.optionValue }}
+                    </label>
+                </ng-template>
+                
+                <ng-template #other>
+                    <div class = "form-field">
+                        <label>{{field.fieldLabel}}</label>
+                        <input [formControlName]="field.controlName" [id]="field.controlName" [type]="field.inputType" [checked]="field.initialValue === true" >
+                    </div>
+                </ng-template>
+
+                <!-- <div class = "form-field">
                     <label>{{field.fieldLabel}}</label>
                     <input [formControlName]="field.controlName" [id]="field.controlName" [type]="field.inputType" [checked]="field.initialValue === true" >
-                </div>
-            </div>
+                    </div>
+                </div> -->
+
+        </div>
+
             
             <div *ngSwitchCase="'select'">
                 <div class="form-field">
