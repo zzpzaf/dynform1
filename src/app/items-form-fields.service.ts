@@ -28,15 +28,17 @@ export class ItemsFormFieldsService {
   }
 
   public setItemId(itemId: number) {
+
     this.itemsDataServise.getItems().subscribe((items: IItem[]) => {
       const item = items.find((item: IItem) => item['itemId'] === itemId);
       this.setItem(item!);
+      // console.log('>===>> setItemId() - itemId:', itemId);
     });
 
   }
 
 
-  private setItem(item: IItem) {
+  public setItem(item: IItem) {
     this.updateFormFieldsInitialValues(item);
     this.itemIdChange$$.next(item);
   }

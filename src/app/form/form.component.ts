@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ChangeService } from '../change.service';
+import { ItemsFormFieldsService } from '../items-form-fields.service';
 import { Subscription } from 'rxjs';
 import { IFormField } from '../dataObjects/IFormField';
 
@@ -12,7 +12,7 @@ import { IFormField } from '../dataObjects/IFormField';
 export class FormComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
-    private formFieldsService: ChangeService
+    private formFieldsService: ItemsFormFieldsService
   ) {}
 
   private formFieldsSubscription!: Subscription;
