@@ -6,6 +6,7 @@ import { IItem } from '../dataObjects/iitem';
 import { ChangeService } from '../change.service';
 import { Subscription } from 'rxjs';
 import { ICategory } from '../dataObjects/icatecory';
+// import { ItemsFormFields } from '../dataObjects/itemFormFields';
 
 @Component({
   selector: 'app-get-data',
@@ -29,12 +30,13 @@ export class GetDataComponent {
 
   constructor( 
     private formBuilder: FormBuilder, 
-    private itemsServise: DataService,
-    private changeService: ChangeService,
+    private itemsDataServise: DataService,
+    private itemFormFieldService: ChangeService,
   ) { }
 
   
   ngOnInit(): void {
+    this.updateCategories();
     this.initializeForm();
   }
 
@@ -59,58 +61,58 @@ export class GetDataComponent {
       return;
     } else {
       this.updateItem(id);
-      this.updateCategories();
+      //this.updateCategories();
     }
     
     // Avoid re-subscribing again and again
     // So, if a subscription is already active, unsubscribe it
     this.unSubscribe();
 
-    this.getItem();
-    this.getCategories();
+    // this.getItem();
+    // this.getCategories();
 
   }
 
 
   updateItem(id:number) {    
     //console.log('>===>> updateItem() - id', id);
-    this.itemsServise.getItems().subscribe((items: IItem[]) => {
+    this.itemsDataServise.getItems().subscribe((items: IItem[]) => {
       const item = items.find((item: IItem) => item['itemId'] === id);
-      this.changeService.setItem(item!);
-      //console.log('>===>> updateItem() - item', item);
+      this.itemFormFieldService.setItem(item!);
+      console.log('>===>> get-data - updateItem() - item', item);
     });
   }
 
 
   updateCategories() {
-    this.itemsServise.getCategories().subscribe((categories: ICategory[]) => {
+    this.itemsDataServise.getCategories().subscribe((categories: ICategory[]) => {
       //console.log('>===>> updateItem() - categories', categories);
-      this.changeService.setCategories(categories);
+      this.itemFormFieldService.setCategories(categories);
     });
   }
   
 
-  getItem(){
-    this.itemChangeSubscription = this.changeService.getItem().subscribe({
-      next : (item: IItem) => {
-        console.log('>===>> onFormSubmit() - Updated item', item);
-      }, 
-      error: (error) => {
-        console.log(">===>> onFormSubmit() - "  + error + ' - Error getting Updated item from changeService.');
-      }
-    });
-  }
+  // getItem(){
+  //   this.itemChangeSubscription = this.changeService.getItem().subscribe({
+  //     next : (item: IItem) => {
+  //       console.log('>===>> onFormSubmit() - Updated item', item);
+  //     }, 
+  //     error: (error) => {
+  //       console.log(">===>> onFormSubmit() - "  + error + ' - Error getting Updated item from changeService.');
+  //     }
+  //   });
+  // }
 
-  getCategories(){
-    this.categoriesUpdatedSubscription = this.changeService.getCategories().subscribe({
-      next : (categories: ICategory[]) => {
-        console.log('>===>> onFormSubmit() - Updated categories', categories);
-      }, 
-      error: (error) => {
-        console.log(">===>> onFormSubmit() - "  + error + ' - Error getting Updated categories from changeService.');
-      }
-    });   
-  }
+  // getCategories(){
+  //   this.categoriesUpdatedSubscription = this.changeService.getCategories().subscribe({
+  //     next : (categories: ICategory[]) => {
+  //       console.log('>===>> onFormSubmit() - Updated categories', categories);
+  //     }, 
+  //     error: (error) => {
+  //       console.log(">===>> onFormSubmit() - "  + error + ' - Error getting Updated categories from changeService.');
+  //     }
+  //   });   
+  // }
 
 
 

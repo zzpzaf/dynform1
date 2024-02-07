@@ -1,12 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { ItemsFormFields } from '../dataObjects/itemFormFields';
+// import { ItemsFormFields } from '../dataObjects/itemFormFields';
 import { ChangeService } from '../change.service';
 import { Subscription } from 'rxjs';
-import { IItem } from '../dataObjects/iitem';
-import { ICategory } from '../dataObjects/icatecory';
-import { IFormOptions } from '../dataObjects/IFormField';
-import { DataService } from '../data.service';
+// import { IItem } from '../dataObjects/iitem';
+// import { ICategory } from '../dataObjects/icatecory';
+// import { IFormField, IFormOptions } from '../dataObjects/IFormField';
+import { IFormField } from '../dataObjects/IFormField';
+// import { DataService } from '../data.service';
 
 
 @Component({
@@ -19,33 +20,45 @@ export class FormComponent implements OnInit, OnDestroy{
   
   constructor( 
     private formBuilder: FormBuilder, 
-    private changeService: ChangeService,
-    private dataServise: DataService,
+    private formFieldsService: ChangeService,
+    // private dataServise: DataService,
    ) { } 
   
-  private itemChangeSubscription!: Subscription ;
-  private categoriesChangeSubscription!: Subscription ;
+  // private itemChangeSubscription!: Subscription ;
+  // private categoriesChangeSubscription!: Subscription ;
+  private formFieldsSubscription!: Subscription ;
   public dynFormGroup!: FormGroup;
-  public formFields = ItemsFormFields;
+  // public formFields = ItemsFormFields;
+  public formFields: IFormField[] = [];
 
   
   ngOnInit(): void {
     
-    this.itemChangeSubscription = this.changeService.getItem().subscribe({
-      next : (item: IItem) => {
+    // this.itemChangeSubscription = this.changeService.getItem().subscribe({
+    //   next : (item: IItem) => {
+    //     //console.log('>===>> formComponent - ngOnInit() - Updated item', item);
+    //     this.updateFormFieldsInitialValues(item);
+    //     this.setFormControlValues();
+    //   }, 
+    //   error: (error) => {
+    //     console.log(">===>> formComponent -  ngOnInit() - "  + error + ' - Error getting Updated item from changeService.');
+    //   }
+    // });
+    this.formFieldsSubscription = this.formFieldsService.getFormFields().subscribe({
+      next : (fFields: IFormField[] ) => {
         //console.log('>===>> formComponent - ngOnInit() - Updated item', item);
-        this.updateFormFieldsInitialValues(item);
+        this.formFields = fFields;
         this.setFormControlValues();
       }, 
       error: (error) => {
-        console.log(">===>> formComponent -  ngOnInit() - "  + error + ' - Error getting Updated item from changeService.');
+        console.log(">===>> formComponent -  ngOnInit() - "  + error + ' - Error getting Updated formFields from Service.');
       }
     });
 
-    this.updateOptions('itemCategories');
+    //this.updateOptions('itemCategories');
 
-    this.initializeForm();
-    this.setFormControlValues();
+    //this.initializeForm();
+    //this.setFormControlValues();
   }
 
 
@@ -59,6 +72,9 @@ export class FormComponent implements OnInit, OnDestroy{
   }
 
   setFormControlValues(): void {
+    if (this.dynFormGroup === undefined) {
+      this.initializeForm();
+    }
     for(let control in this.dynFormGroup.controls){
       this.formFields.forEach((field) => {
         if(field.controlName === control){
@@ -69,65 +85,65 @@ export class FormComponent implements OnInit, OnDestroy{
     }
   }
 
-  updateFormFieldsInitialValues(item: IItem): void {
-    this.formFields.forEach((field) => {
-      const dataField = field.dataField;
-      if (dataField !== undefined && item.hasOwnProperty(dataField)) {
+  // updateFormFieldsInitialValues(item: IItem): void {
+  //   this.formFields.forEach((field) => {
+  //     const dataField = field.dataField;
+  //     if (dataField !== undefined && item.hasOwnProperty(dataField)) {
         
-        if (field.options) {
-            let initValKeys: any[] = [];
-            if (field.controlType === 'select' && field.controlName === 'itemCategories') {
-                item.categoryNames.forEach((category: string) => {
-                field.options!.forEach((option: IFormOptions) => {
-                    if (option.optionValue === category) {
-                        option.isOptionSelected = true;
-                        initValKeys.push(option.optionKey);
-                    }
-                  });
-                });
-            } else if (field.inputType === 'radio') {
-                // console.log('>===>> updateFormFieldsInitialValues() - Item Id: ', item.itemId, 'Item Status: ', item.itemStatusId );
-                field.options!.forEach((option: IFormOptions) => {
-                    if (option.optionKey === item.itemStatusId) {
-                        option.isOptionSelected = true;
-                    } else {
-                        option.isOptionSelected = false;
-                    }
-                    // console.log('>===>> updateFormFieldsInitialValues() - option.optionKey: ', option.optionKey, 'option.optionValue: ', option.optionValue, 'option.isOptionSelected: ', option.isOptionSelected);    
-                });
-            }
-            field.initialValue = initValKeys;     
-            // console.log('>===>> updateFormFieldsInitialValues() - field.initialValue', field.initialValue);
+  //       if (field.options) {
+  //           let initValKeys: any[] = [];
+  //           if (field.controlType === 'select' && field.controlName === 'itemCategories') {
+  //               item.categoryNames.forEach((category: string) => {
+  //               field.options!.forEach((option: IFormOptions) => {
+  //                   if (option.optionValue === category) {
+  //                       option.isOptionSelected = true;
+  //                       initValKeys.push(option.optionKey);
+  //                   }
+  //                 });
+  //               });
+  //           } else if (field.inputType === 'radio') {
+  //               // console.log('>===>> updateFormFieldsInitialValues() - Item Id: ', item.itemId, 'Item Status: ', item.itemStatusId );
+  //               field.options!.forEach((option: IFormOptions) => {
+  //                   if (option.optionKey === item.itemStatusId) {
+  //                       option.isOptionSelected = true;
+  //                   } else {
+  //                       option.isOptionSelected = false;
+  //                   }
+  //                   // console.log('>===>> updateFormFieldsInitialValues() - option.optionKey: ', option.optionKey, 'option.optionValue: ', option.optionValue, 'option.isOptionSelected: ', option.isOptionSelected);    
+  //               });
+  //           }
+  //           field.initialValue = initValKeys;     
+  //           // console.log('>===>> updateFormFieldsInitialValues() - field.initialValue', field.initialValue);
         
-        } else {
-            field.initialValue = item[dataField];
-            if (field.inputType === 'checkbox') {
-              // field.initialValue = true;
-              console.log('>===>> updateFormFieldsInitialValues() - field.initialValue', field.initialValue);
-            }
-        }
+  //       } else {
+  //           field.initialValue = item[dataField];
+  //           if (field.inputType === 'checkbox') {
+  //             // field.initialValue = true;
+  //             console.log('>===>> updateFormFieldsInitialValues() - field.initialValue', field.initialValue);
+  //           }
+  //       }
 
-      }
-    });
-  }
+  //     }
+  //   });
+  // }
 
 
-  updateOptions(cotrolName: string) {
-    this.dataServise.getCategories().subscribe((categories: ICategory[]) => {
-      //console.log('>===>> updateItem() - categories', categories);
-      let options: IFormOptions[] = [];
-      categories.forEach((category: ICategory) => {
-        options.push({optionKey: category.categoryId, optionValue: category.categoryName});
-      });
-      this.formFields.forEach((field) => {
-        if( field.controlName === cotrolName && field.controlType === 'select') {
-          field.options = options;
-        }
-      });
+  // updateOptions(cotrolName: string) {
+  //   this.dataServise.getCategories().subscribe((categories: ICategory[]) => {
+  //     //console.log('>===>> updateItem() - categories', categories);
+  //     let options: IFormOptions[] = [];
+  //     categories.forEach((category: ICategory) => {
+  //       options.push({optionKey: category.categoryId, optionValue: category.categoryName});
+  //     });
+  //     this.formFields.forEach((field) => {
+  //       if( field.controlName === cotrolName && field.controlType === 'select') {
+  //         field.options = options;
+  //       }
+  //     });
 
-      this.changeService.setCategories(categories);
-    });
-  }
+  //     this.changeService.setCategories(categories);
+  //   });
+  // }
 
 
   onFormSubmit(event: Event): void {
@@ -142,7 +158,7 @@ export class FormComponent implements OnInit, OnDestroy{
   }
 
   unSubscribe() {
-    if (!!this.itemChangeSubscription) this.itemChangeSubscription.unsubscribe();
+    if (!!this.formFieldsSubscription) this.formFieldsSubscription.unsubscribe();
   }
 
 }
