@@ -10,108 +10,90 @@ import { DataService } from './data.service';
   providedIn: 'root',
 })
 export class ItemsFormFieldsService {
-  private itemIdChange$$ = new Subject<IItem>();
-  private categories$$ = new Subject<ICategory[]>();
   private formFields: IFormField[] = ItemsFormFields;
   private formFields$$ = new BehaviorSubject<IFormField[]>(this.formFields);
-  private categories: ICategory[] = [];
 
-
-  constructor(
-    private itemsDataServise: DataService,
-  ) {
+  constructor(private itemsDataServise: DataService) {
     this.itemsDataServise
       .getCategories()
       .subscribe((categories: ICategory[]) => {
-        this.setCategories(categories);
+        let optionsObject: { key: number, value: any }[] = [];
+        categories.forEach((category: ICategory) => {
+          optionsObject.push({ key: category.categoryId, value: category.categoryName });
+        });
+        this.setFormFieldSelectOptions('itemCategories', optionsObject);
       });
   }
 
   public setItemId(itemId: number) {
-
     this.itemsDataServise.getItems().subscribe((items: IItem[]) => {
       const item = items.find((item: IItem) => item['itemId'] === itemId);
-      this.setItem(item!);
-      // console.log('>===>> setItemId() - itemId:', itemId);
+      if (item) this.updateFormFieldsInitialValues(item);
     });
-
-  }
-
-
-  public setItem(item: IItem) {
-    this.updateFormFieldsInitialValues(item);
-    this.itemIdChange$$.next(item);
-  }
-
-  public getItem(): Observable<IItem> {
-    return this.itemIdChange$$.asObservable();
-  }
-
-  public setCategories(categories: ICategory[]) {
-    this.categories = categories;
-    this.updateOptions('itemCategories');
-    this.categories$$.next(categories);
-  }
-
-  public getCategories(): Observable<ICategory[]> {
-    return this.categories$$.asObservable();
   }
 
   public getFormFields(): Observable<IFormField[]> {
     return this.formFields$$.asObservable();
   }
 
-
-
-  private updateOptions(cotrolName: string) {
-    let options: IFormOptions[] = [];
-    this.categories.forEach((category: ICategory) => {
-      options.push({
-        optionKey: category.categoryId,
-        optionValue: category.categoryName,
+  private setFormFieldSelectOptions(cotrolName: string, selOptions: { key: number, value: any }[]) {
+    let ffoptions: IFormOptions[] = [];
+    selOptions.forEach((selOption: { key: number, value: any }) => {
+      ffoptions.push({
+        optionKey: selOption.key,
+        optionValue: selOption.value,
       });
     });
     this.formFields.find(
       (field) =>
         field.controlName === cotrolName && field.controlType === 'select'
-    )!.options = options;
+    )!.options = ffoptions;
     this.formFields$$.next(this.formFields);
   }
 
+
+
+  
   private updateFormFieldsInitialValues(item: IItem): void {
     this.formFields.forEach((field) => {
       const dataField = field.dataField;
-      if (dataField !== undefined && item.hasOwnProperty(dataField)) {
-        if (field.options) {
-          let initValKeys: any[] = [];
-          if (
-            field.controlType === 'select' &&
-            field.controlName === 'itemCategories'
-          ) {
-            item.categoryNames.forEach((category: string) => {
-              field.options!.forEach((option: IFormOptions) => {
-                if (option.optionValue === category) {
-                  option.isOptionSelected = true;
-                  initValKeys.push(option.optionKey);
-                }
-              });
-            });
-          } else if (field.inputType === 'radio') {
-            field.options!.forEach((option: IFormOptions) => {
-              if (option.optionKey === item.itemStatusId) {
-                option.isOptionSelected = true;
-              } else {
-                option.isOptionSelected = false;
-              }
-            });
-          }
-          field.initialValue = initValKeys;
-        } else {
-          field.initialValue = item[dataField];
-        }
-      }
+      if (dataField === undefined || !item.hasOwnProperty(dataField)) return;
+      if (
+        field.options &&
+        field.controlType === 'select' &&
+        field.controlName === 'itemCategories'
+      )
+        field.initialValue = this.updateSelectOptions(
+          field,
+          item.categoryNames
+        );
+      if (field.options && field.inputType === 'radio')
+        field.options = this.updateRadioOptions(field, item.itemStatusId);
+      if (!field.options) field.initialValue = item[dataField];
+      this.formFields$$.next(this.formFields);
     });
-    this.formFields$$.next(this.formFields);
   }
 
+  private updateSelectOptions(
+    field: IFormField,
+    selectedValues: string[]
+  ): any[] {
+    let initValKeys: any[] = [];
+    selectedValues.forEach((val: string) => {
+      field.options!.forEach((option: IFormOptions) => {
+        if (option.optionValue === val) {
+          option.isOptionSelected = true;
+          initValKeys.push(option.optionKey);
+        }
+      });
+    });
+    return initValKeys;
+  }
+
+  private updateRadioOptions(field: IFormField, key: any): any[] | undefined {
+    field.options!.forEach((option: IFormOptions) => {
+      if (option.optionKey === key) option.isOptionSelected = true; else option.isOptionSelected = false;
+    });
+    return field.options;
+  }
 }

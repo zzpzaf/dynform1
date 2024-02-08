@@ -2,7 +2,7 @@
   {
     "itemId": 1,
     "itemName": "Wooden Pencil",
-    "itemDescription": null,
+    "itemDescription": "A wooden pencil with eraser.",
     "itemModelYear": 1998,
     "itemStatusId": 1,
     "itemCrUUID": "0b1c4ea9-c0d3-11ee-bd4e-0242ac110002",
@@ -26,7 +26,7 @@
   {
     "itemId": 3,
     "itemName": "Silica Eraser",
-    "itemDescription": null,
+    "itemDescription": "Colorfull big eraser",
     "itemModelYear": 2007,
     "itemStatusId": 1,
     "itemCrUUID": "0b1c7537-c0d3-11ee-bd4e-0242ac110002",

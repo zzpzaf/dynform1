@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ItemsFormFieldsService } from '../items-form-fields.service';
-import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -25,6 +24,11 @@ export class GetDataComponent {
 
   ngOnInit(): void {
     this.initializeForm();
+    this.demoFormGroup.valueChanges.subscribe(val => {
+      const id = this.demoFormGroup.get(this.input1ControlNane)?.value;
+      if (id == undefined || id == null || id == '' || id <= 0) return;
+      this.itemFormFieldsService.setItemId(id!);
+    });
   }
 
   initializeForm(): void {
@@ -33,10 +37,10 @@ export class GetDataComponent {
     this.demoFormGroup = fbGroup;
   }
 
-  onFormSubmit(event: Event): void {
-    const id = this.demoFormGroup.get(this.input1ControlNane)?.value;
-    if (id == undefined || id == null || id == '' || id <= 0) return;
-    this.itemFormFieldsService.setItemId(id!);
-  }
-
+  // onFormSubmit(event: Event): void {
+  //   const id = this.demoFormGroup.get(this.input1ControlNane)?.value;
+  //   if (id == undefined || id == null || id == '' || id <= 0) return;
+  //   this.itemFormFieldsService.setItemId(id!);
+  // }
+  
 }
