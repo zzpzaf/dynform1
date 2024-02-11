@@ -62,7 +62,7 @@ export const ItemsFormFields: IFormField[] = [
         },
         {
           dataField: 'itemCrTimestamp',
-          controlType: 'input',
+          controlType: 'datetime',
           controlName: 'itemCreatedTimestamp',
           fieldLabel: 'Date/Time: ',
           inputType: 'datetime-local',
@@ -80,7 +80,7 @@ export const ItemsFormFields: IFormField[] = [
         },
         {
           dataField: 'itemStatusId',
-          controlType: 'input',
+          controlType: 'radio',
           controlName: 'itemStatus',
           fieldLabel: 'Item Status:',
           inputType: 'radio',
@@ -92,7 +92,7 @@ export const ItemsFormFields: IFormField[] = [
         },
         {
           dataField: 'isItemEnabled',
-          controlType: 'input',
+          controlType: 'checkbox',
           controlName: 'isItemEnabled',
           fieldLabel: 'Enabled:',
           inputType: 'checkbox',
