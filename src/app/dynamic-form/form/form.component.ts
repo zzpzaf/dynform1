@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { ItemsFormFieldsService } from '../items-form-fields.service';
+import { ItemsFormFieldsService } from '../../items-form-fields.service';
 import { Subscription } from 'rxjs';
-import { IFormField, IFormFieldValidator } from '../dataObjects/IFormField';
+import { IFormField, IFormFieldValidator } from '../../dataObjects/IFormField';
 
 @Component({
   selector: 'dyn-form',

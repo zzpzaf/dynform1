@@ -9,7 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { HomeComponent } from './home/home.component';
 import { GetDataComponent } from './get-data/get-data.component';
-import { FormComponent } from './form/form.component';
+import { DynamicFormModule } from './dynamic-form/dynamic-form.module';
 
 
 @NgModule({
@@ -17,7 +17,6 @@ import { FormComponent } from './form/form.component';
     AppComponent, 
     HomeComponent, 
     GetDataComponent, 
-    FormComponent, 
   ],
   imports: [
     BrowserModule,
@@ -26,6 +25,7 @@ import { FormComponent } from './form/form.component';
     MaterialModule,
     HttpClientModule,
     ReactiveFormsModule,
+    DynamicFormModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
