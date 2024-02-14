@@ -48,6 +48,7 @@ export interface IFormField {
   fieldLabel: string;
   inputType?: standardInputType;
   readOnly?: boolean;
+  disabled?: boolean,
   initialValue?: any | any[];
   options?: IFormOptions[];
   multipleOptions?: boolean;

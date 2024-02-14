@@ -20,6 +20,8 @@ export class FormComponent implements OnInit, OnDestroy {
   public formFields: IFormField[] = [];
   public isFormSubmitted: boolean = false;
 
+  public fornCardTitle: string = 'Dynamic Form with Dynamic Components';
+
   ngOnInit(): void {
     this.formFieldsSubscription = this.formFieldsService
       .getFormFields()
@@ -36,7 +38,33 @@ export class FormComponent implements OnInit, OnDestroy {
           );
         },
       });
-  }
+  
+  
+      // this.dynFormGroup.valueChanges.subscribe(val => {
+      //   //console.log('>===>> FormContainerComponent - Form Value Changes:', val);
+      //   // *** The following line seems to be 'must' to make the form value changes to be submitted.
+      //      this.dynFormGroup.patchValue(val, {emitEvent: false, onlySelf: true});
+      //      this.dynFormGroup.markAsDirty();
+      //      console.log('>===>> FormContainerComponent - Form Value Changes:',this.dynFormGroup.getRawValue());
+      //     // Show controls errors
+      //     Object.keys(this.dynFormGroup.controls).forEach(control => {
+      //       const controlErrors: ValidationErrors = this.dynFormGroup.get(control)!.errors!;
+      //       // if (controlErrors != null) {
+      //       //   Object.keys(controlErrors).forEach(keyError => {
+      //       //     console.log('Form control: ' + control + ', Error key/Name: ' + keyError + ', Error value: ', controlErrors[keyError]);
+      //       //   });
+      //       // }
+      //     });
+      // });
+  
+  
+  
+  
+  
+  
+  
+  
+    }
 
   initializeForm(): void {
     const fbGroup = this.formBuilder.group({});

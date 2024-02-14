@@ -99,13 +99,6 @@ export const ItemsFormFields: IFormField[] = [
           initialValue: true,
         },
         {
-          dataField: 'itemStatusId',
-          controlType: 'input',
-          controlName: 'itemStatus',
-          fieldLabel: 'Item Status:',
-          inputType: 'radio',
-        },
-        {
           controlType: 'button',
           controlName: 'submitButton',
           fieldLabel: 'Submit:',
